@@ -4,7 +4,7 @@ Pick one of the 10 real IPL 2026 franchises, build a squad from a ₹125 Cr budg
 
 > **Unofficial fan project.** This is a coding/portfolio simulation using real team names and real, publicly known players for fun. It is **not affiliated with, endorsed by, or connected to the BCCI, IPL, or any franchise**. All player ratings, base prices, and auction outcomes are simplified numbers made up for this game — not official statistics or valuations.
 
-**[Live Demo](#)** — replace this with your GitHub Pages link after deploying (steps below)
+**[Live Demo](#)** — [](https://darshmegh.github.io/AuctionArena/)
 
 ![Auction Arena preview](https://via.placeholder.com/900x500/0B1F17/F2B807?text=Auction+Arena+%E2%80%94+IPL+2026+Auction+Simulator)
 
