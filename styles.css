@@ -34,6 +34,11 @@ html, body{
 
 button, select{ font-family: inherit; }
 
+/* The native `hidden` attribute must always win over any element's own
+   display rule (e.g. .team-select-overlay's display:flex) — without this,
+   toggling .hidden = true in JS has zero visual effect. */
+[hidden]{ display: none !important; }
+
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
