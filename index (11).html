@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auction Arena — IPL-style Auction Simulator</title>
+<meta name="description" content="Build a squad from a ₹125 Cr budget against 9 AI bidders, then pick your Best XI. A full auction simulation, entirely client-side.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- TEAM SELECT OVERLAY -->
+<div class="team-select-overlay" id="teamSelectOverlay">
+  <div class="team-select-card">
+    <div class="brand" style="justify-content:center; margin-bottom:8px;">
+      <span class="brand-icon">🏏</span>
+      <span class="brand-name">Auction Arena</span>
+    </div>
+    <p class="team-select-tag">Pick a franchise to play as. The other 9 become AI bidders.</p>
+    <div class="team-select-grid" id="teamSelectGrid"></div>
+    <p class="disclaimer-text">Unofficial fan-made simulation for portfolio purposes — not affiliated with or endorsed by the BCCI or IPL. Player ratings and prices are simplified numbers made up for this game, not official figures.</p>
+  </div>
+</div>
+
+<div class="app" id="mainApp" hidden>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">🏏</span>
+      <span class="brand-name">Auction Arena</span>
+    </div>
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-view="auction">Auction</button>
+      <button class="tab" data-view="squad">My Squad</button>
+      <button class="tab" data-view="bestxi">Best XI</button>
+      <button class="tab" data-view="standings">Standings</button>
+    </nav>
+    <div class="budget-pill">
+      <span class="budget-label">Your Budget</span>
+      <span class="budget-value" id="budgetValue">₹125.0 Cr</span>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- AUCTION VIEW -->
+    <section class="view active" id="view-auction">
+
+      <div class="auction-grid">
+
+        <div class="panel player-panel">
+          <p class="auction-progress" id="auctionProgress">Player 1 of 250</p>
+
+          <div class="player-card" id="playerCard">
+            <!-- filled by app.js -->
+          </div>
+
+          <div class="bid-row">
+            <div class="current-price">
+              <span class="current-price-label">Current bid</span>
+              <span class="current-price-value" id="currentPriceValue">₹0.0 Cr</span>
+              <span class="current-bidder" id="currentBidder">No bids yet</span>
+            </div>
+          </div>
+
+          <div class="action-row">
+            <button class="btn btn-primary btn-lg" id="bidBtn">Bid ₹0.0 Cr</button>
+            <button class="btn btn-outline btn-lg" id="passBtn">Pass</button>
+          </div>
+
+          <div class="auction-complete-note" id="auctionCompleteNote" hidden>
+            <p>Auction complete! Head to <strong>Best XI</strong> to build your lineup, or check <strong>Standings</strong> to see how every team did.</p>
+          </div>
+        </div>
+
+        <div class="panel activity-panel">
+          <h2 class="panel-title">Auction log</h2>
+          <div class="activity-log" id="activityLog"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SQUAD VIEW -->
+    <section class="view" id="view-squad">
+      <div class="panel">
+        <div class="squad-head">
+          <h2 class="panel-title">My Squad</h2>
+          <div class="squad-stats" id="squadStats"></div>
+        </div>
+
+        <div class="validation-list" id="validationList"></div>
+
+        <div class="squad-table-wrap">
+          <table class="squad-table" id="squadTable">
+            <thead>
+              <tr><th>Player</th><th>Role</th><th>Tier</th><th>Nationality</th><th>Price</th></tr>
+            </thead>
+            <tbody id="squadTableBody"></tbody>
+          </table>
+          <p class="empty-hint" id="squadEmptyHint">No players bought yet — head to the Auction tab.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BEST XI VIEW -->
+    <section class="view" id="view-bestxi">
+      <div class="panel">
+        <div class="squad-head">
+          <h2 class="panel-title">Best XI</h2>
+          <button class="btn btn-primary" id="autoPickBtn">Auto-pick Best XI</button>
+        </div>
+        <p class="control-hint">Click any squad player below to add or remove them from your XI (max 11). Auto-pick fills the rest for you.</p>
+
+        <div class="xi-summary" id="xiSummary"></div>
+
+        <div class="captain-row" id="captainRow" hidden>
+          <div class="captain-field">
+            <label class="control-label">Captain</label>
+            <select id="captainSelect" class="font-select"></select>
+          </div>
+          <div class="captain-field">
+            <label class="control-label">Vice-Captain</label>
+            <select id="viceCaptainSelect" class="font-select"></select>
+          </div>
+        </div>
+
+        <h3 class="sub-title">Your squad (click to toggle in/out of XI)</h3>
+        <div class="squad-chip-grid" id="squadChipGrid"></div>
+        <p class="empty-hint" id="bestxiEmptyHint">Buy some players in the Auction tab first.</p>
+      </div>
+    </section>
+
+    <!-- STANDINGS VIEW -->
+    <section class="view" id="view-standings">
+      <div class="panel">
+        <h2 class="panel-title">Standings</h2>
+        <div class="standings-table-wrap">
+          <table class="squad-table" id="standingsTable">
+            <thead>
+              <tr><th>Team</th><th>Spent</th><th>Remaining</th><th>Squad Size</th><th>Overseas</th></tr>
+            </thead>
+            <tbody id="standingsTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="auction.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
